@@ -28,7 +28,7 @@ class Typer:
 
     KEY_TO_FINGER_MAP = {key: finger for (finger, keys) in FINGER_TO_KEY_MAP.items() for key in keys}
 
-    def __init__(self):
+    def __init__(self, speed_mult = 1):
         self.keyboard = Keyboard()
         self.finger_positions = {
             "LEFT_PINKY": "a",
@@ -41,6 +41,8 @@ class Typer:
             "RIGHT_PINKY": ";",
             "THUMB": " ",
         }
+
+        self.speed_mult = speed_mult
 
     def _finger_for_key(self, key):
         return Typer.KEY_TO_FINGER_MAP[self.keyboard.get_keyboard_key(key)]
@@ -95,5 +97,5 @@ class Typer:
         jitter_time_ms = self._typing_jitter()
 
         time_to_wait_s = (delay + jitter_time_ms) / 1000
-        sleep(time_to_wait_s)
+        sleep(time_to_wait_s / self.speed_mult)
         self._move_fingers_to_positions(new_positions)
