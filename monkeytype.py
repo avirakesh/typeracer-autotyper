@@ -54,26 +54,30 @@ def get_latest_words(browser, current_words, prefix_match_len = 3):
     return [""] + raw_words_arr[curr_idx + prefix_match_len + 1:]
 
 
-
 if __name__ == '__main__':
     browser = webdriver.Chrome()
     # Load browser
     browser.get("https://monkeytype.com")
 
     browser.implicitly_wait(60)  # wait upto a minute to resolve the html elements
-    cookie_accept_all_button = browser.find_elements(by=Selector.CSS_SELECTOR, value="div.button.acceptAll")
 
-    if len(cookie_accept_all_button) == 0:
-        pass # do nothing if there isn't a cookie prompt
-    elif len(cookie_accept_all_button) == 1:
-        cookie_accept_all_button[0].click() # accept all cookies
-    else:
-        print(f"Invalid number of 'Accept All' buttons found: {len(cookie_accept_all_button)}")
-        exit(1)
+    input("Please Resolve Cookies modal and press Enter")
 
-    time.sleep(5)
+    print()
+    print("Click back into the browser window so the words are shown")
 
-    inputs = browser.find_elements(by=Selector.CSS_SELECTOR, value="input#wordsInput")
+    WAIT_TIME_S = 10
+
+    for i in reversed(range(10)):
+        print(f"Typing will start in {i + 1} seconds...")
+        time.sleep(1)
+
+    print()
+    print("Let's go!")
+
+    inputs = browser.find_elements(
+        by=Selector.CSS_SELECTOR, value="textArea#wordsInput"
+    )
     if len(inputs) != 1:
         print(f"Found invalid number of inputs: {len(inputs)}")
         exit(1)
@@ -86,3 +90,7 @@ if __name__ == '__main__':
         print(f"'{words}'")
         simulate_typing_in_browser(typer, inputs[0], words)
         words_arr = get_latest_words(browser, words_arr)
+
+    ret = ""
+    if ret != "\n":
+        input("Press Return to Exit.")
